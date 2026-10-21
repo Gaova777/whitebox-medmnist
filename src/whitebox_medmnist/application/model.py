@@ -6,6 +6,14 @@ from torch import nn
 
 
 def build(n_classes: int, in_channels: int, size: int) -> nn.Module:
+    m = _build(n_classes, in_channels, size)
+    for module in m.modules():  # Guided Backprop hooks the ReLUs; in-place ones would overwrite what it needs
+        if isinstance(module, nn.ReLU):
+            module.inplace = False
+    return m
+
+
+def _build(n_classes: int, in_channels: int, size: int) -> nn.Module:
     if size <= 32:
         m = torchvision.models.resnet18(num_classes=n_classes)
         m.conv1 = nn.Conv2d(in_channels, 64, 3, 1, 1, bias=False)
