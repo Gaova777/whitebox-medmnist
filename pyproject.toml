@@ -1,0 +1,35 @@
+[project]
+name = "whitebox-medmnist"
+version = "0.1.0"
+description = "A medical image classifier that says whether its own explanation can be trusted: MedMNIST, saliency sanity checks, stability"
+readme = "README.md"
+authors = [
+    { name = "Juan Diego", email = "gaova777@utp.edu.co" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "captum>=0.9.0",
+    "fastapi>=0.156.4",
+    "medmnist>=3.0.2",
+    "pillow>=13.0.0",
+    "python-multipart>=0.0.32",
+    "scikit-image>=0.26.0",
+    "scipy>=1.18.1",
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 120
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]
