@@ -1,0 +1,14 @@
+:root {
+  --sans: 'Source Sans 3', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #0b0d10;
+  color: #dee2e6;
+  font: 14px var(--sans);
+}

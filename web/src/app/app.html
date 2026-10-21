@@ -1,0 +1,104 @@
+<div class="notice">
+  {{ info()?.notice ?? 'Educational demo of explainability methods. Not a medical device; not for diagnosis.' }}
+</div>
+
+<header class="bar">
+  <div class="brand"><span class="mark"></span>whitebox · explanations you can check</div>
+  <nav>
+    @for (d of info()?.datasets ?? {} | keyvalue; track d.key) {
+      <button [class.on]="dataset() === d.key" (click)="load(d.key)">
+        {{ d.key === 'pneumoniamnist' ? 'Chest X-ray (pneumonia)' : 'Blood cells' }}
+      </button>
+    }
+  </nav>
+</header>
+
+<main class="layout">
+  <aside class="series">
+    <h3>Test images</h3>
+    <div class="thumbs">
+      @for (s of samples(); track $index) {
+        <button class="thumb" [class.on]="s === current()" (click)="pick(s)" [title]="s.label">
+          <img [src]="s.image" alt="" />
+        </button>
+      }
+    </div>
+    <label class="upload"><input type="file" accept="image/*" (change)="upload($event)" />Load your own image</label>
+  </aside>
+
+  <section class="viewer">
+    @if (current(); as c) {
+      <div class="stage">
+        <img class="base" [src]="c.image" alt="" />
+        @if (shown(); as e) {
+          <img class="heat" [src]="e.map" [style.opacity]="opacity()" alt="" />
+        }
+        <div class="overlay tl">{{ info()?.size }}×{{ info()?.size }} px · {{ labels[method()] }}</div>
+        <div class="overlay bl">label: {{ c.label }}</div>
+      </div>
+      <div class="controls">
+        <span>Heat map opacity</span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          [value]="opacity()"
+          (input)="opacity.set(+$any($event.target).value)"
+        />
+      </div>
+    } @else {
+      <p class="muted">Loading…</p>
+    }
+  </section>
+
+  <aside class="panel">
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    @if (busy()) {
+      <p class="muted">Computing six explanations…</p>
+    }
+    @if (result(); as r) {
+      <div class="pred">
+        <span>Model output</span>
+        <b>{{ r.prediction }}</b>
+        <em>{{ r.confidence * 100 | number: '1.0-0' }}% confidence</em>
+      </div>
+      <h3>Explanations</h3>
+      <ul class="methods">
+        @for (e of r.explanations; track e.method) {
+          <li
+            [class.on]="method() === e.method"
+            (click)="method.set(e.method)"
+            [class]="'lv-' + e.badge.level.split(' ')[0]"
+          >
+            <img [src]="e.map" alt="" />
+            <div>
+              <b>{{ labels[e.method] }}</b>
+              <span class="badge">{{ e.badge.level }}</span>
+              <small>{{ e.badge.why }}</small>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+    @if ((drift() | keyvalue).length) {
+      <h3>Drift check (test set)</h3>
+      <table class="drift">
+        <tr>
+          <th>Images</th>
+          <th>Accuracy</th>
+          <th>Drift flagged in</th>
+        </tr>
+        @for (d of drift() | keyvalue; track d.key) {
+          <tr>
+            <td>{{ d.key.replace('_', ' ') }}</td>
+            <td>{{ d.value.accuracy * 100 | number: '1.1-1' }}%</td>
+            <td>{{ d.value.drifted_columns.join(', ') || 'none' }}</td>
+          </tr>
+        }
+      </table>
+    }
+  </aside>
+</main>
