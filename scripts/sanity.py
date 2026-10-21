@@ -23,8 +23,14 @@ from whitebox_medmnist.application.similarity import all_measures, spearman_abs
 from whitebox_medmnist.domain.trust import passes_sanity, top_k_overlap
 
 
-def maps_for(model, x, target, device):
-    return {m: explain(model, x.to(device), target.to(device), m).cpu().numpy() for m in METHODS}
+def maps_for(model, x, target, device, chunk=5):
+    """In small chunks: Integrated Gradients alone runs 32 forward and backward passes per image."""
+    out = {}
+    for m in METHODS:
+        parts = [explain(model, x[i:i + chunk].to(device), target[i:i + chunk].to(device), m).cpu().numpy()
+                 for i in range(0, len(x), chunk)]
+        out[m] = np.concatenate(parts)
+    return out
 
 
 def compare(reference, other):
@@ -37,7 +43,7 @@ def compare(reference, other):
 
 
 def main(args):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     info = INFO[args.dataset]
     x, y = arrays(args.dataset, "test", args.size)
     idx = np.random.default_rng(args.seed).choice(len(x), args.n, replace=False)
@@ -93,4 +99,5 @@ if __name__ == "__main__":
     parser.add_argument("--n", type=int, default=50)
     parser.add_argument("--noise", type=float, default=0.02, help="std of the noise for the stability test")
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--device", default=None, help="cpu to leave the GPU to another job")
     main(parser.parse_args())
