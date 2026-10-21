@@ -134,10 +134,6 @@ h3 {
   height: 100%;
   image-rendering: pixelated;
 }
-.heat {
-  mix-blend-mode: screen;
-  filter: sepia(1) saturate(6) hue-rotate(-30deg);
-}
 .overlay {
   position: absolute;
   font: 11px var(--mono);

@@ -69,6 +69,18 @@ def png(a: np.ndarray) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
+def heat_png(a: np.ndarray) -> str:
+    """A heat map that reads on any image: red to yellow as it gets stronger, transparent where it's weak."""
+    v = (a - a.min()) / (np.ptp(a) or 1)
+    rgba = np.zeros((*v.shape, 4), dtype=np.uint8)
+    rgba[..., 0] = 255
+    rgba[..., 1] = (255 * v).astype(np.uint8)
+    rgba[..., 3] = (255 * v ** 0.8).astype(np.uint8)
+    buf = io.BytesIO()
+    Image.fromarray(rgba, mode="RGBA").save(buf, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 @app.get("/datasets")
 def datasets():
     from whitebox_medmnist.adapters.medmnist_data import classes
@@ -118,7 +130,7 @@ async def explain_image(dataset: str, image: Annotated[UploadFile, File()]):
         copies = [explain(m, n, target, method)[0].numpy().ravel().tolist() for n in noisy]
         stability = float(np.mean([top_k_overlap(copies[i], copies[j], k) for i in range(3) for j in range(i + 1, 3)]))
         passed = verdict(dataset).get(method, {}).get("passes_sanity", False)
-        out.append({"method": method, "map": png(heat), "stability": round(stability, 3), "badge": badge(passed, stability)})
+        out.append({"method": method, "map": heat_png(heat), "stability": round(stability, 3), "badge": badge(passed, stability)})
     return {"notice": NOTICE, "prediction": classes(dataset)[int(target)], "confidence": float(probs.max()),
             "explanations": out}
 
