@@ -1,0 +1,142 @@
+{
+ "clean": {
+  "accuracy": 0.8974358974358975,
+  "drift": {
+   "brightness": {
+    "method": "K-S p_value",
+    "value": 0.1519,
+    "drift": false
+   },
+   "contrast": {
+    "method": "K-S p_value",
+    "value": 0.0886,
+    "drift": false
+   },
+   "sharpness": {
+    "method": "K-S p_value",
+    "value": 0.1043,
+    "drift": false
+   },
+   "entropy": {
+    "method": "K-S p_value",
+    "value": 0.0457,
+    "drift": true
+   },
+   "confidence": {
+    "method": "K-S p_value",
+    "value": 0.0001,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "entropy",
+   "confidence"
+  ]
+ },
+ "noise": {
+  "accuracy": 0.6346153846153846,
+  "drift": {
+   "brightness": {
+    "method": "K-S p_value",
+    "value": 0.1519,
+    "drift": false
+   },
+   "contrast": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "sharpness": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "entropy": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "confidence": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "contrast",
+   "sharpness",
+   "entropy",
+   "confidence"
+  ]
+ },
+ "blur": {
+  "accuracy": 0.6714743589743589,
+  "drift": {
+   "brightness": {
+    "method": "K-S p_value",
+    "value": 0.1519,
+    "drift": false
+   },
+   "contrast": {
+    "method": "K-S p_value",
+    "value": 0.3142,
+    "drift": false
+   },
+   "sharpness": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "entropy": {
+    "method": "K-S p_value",
+    "value": 0.2326,
+    "drift": false
+   },
+   "confidence": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "sharpness",
+   "confidence"
+  ]
+ },
+ "low_contrast": {
+  "accuracy": 0.7580128205128205,
+  "drift": {
+   "brightness": {
+    "method": "K-S p_value",
+    "value": 0.1519,
+    "drift": false
+   },
+   "contrast": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "sharpness": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "entropy": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   },
+   "confidence": {
+    "method": "K-S p_value",
+    "value": 0.0,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "contrast",
+   "sharpness",
+   "entropy",
+   "confidence"
+  ]
+ }
+}

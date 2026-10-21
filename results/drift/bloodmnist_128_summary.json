@@ -1,0 +1,139 @@
+{
+ "clean": {
+  "accuracy": 0.9868459514761766,
+  "drift": {
+   "brightness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0297,
+    "drift": false
+   },
+   "contrast": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0254,
+    "drift": false
+   },
+   "sharpness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.034,
+    "drift": false
+   },
+   "entropy": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0259,
+    "drift": false
+   },
+   "confidence": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0115,
+    "drift": false
+   }
+  },
+  "drifted_columns": []
+ },
+ "noise": {
+  "accuracy": 0.9298450745396083,
+  "drift": {
+   "brightness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0941,
+    "drift": false
+   },
+   "contrast": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0705,
+    "drift": false
+   },
+   "sharpness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 28.6051,
+    "drift": true
+   },
+   "entropy": {
+    "method": "Wasserstein distance (normed)",
+    "value": 1.6899,
+    "drift": true
+   },
+   "confidence": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.8332,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "sharpness",
+   "entropy",
+   "confidence"
+  ]
+ },
+ "blur": {
+  "accuracy": 0.9234142063724057,
+  "drift": {
+   "brightness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0297,
+    "drift": false
+   },
+   "contrast": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.1719,
+    "drift": true
+   },
+   "sharpness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 1.5689,
+    "drift": true
+   },
+   "entropy": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0936,
+    "drift": false
+   },
+   "confidence": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.7511,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "contrast",
+   "sharpness",
+   "confidence"
+  ]
+ },
+ "low_contrast": {
+  "accuracy": 0.7842736042092955,
+  "drift": {
+   "brightness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 0.0297,
+    "drift": false
+   },
+   "contrast": {
+    "method": "Wasserstein distance (normed)",
+    "value": 2.7013,
+    "drift": true
+   },
+   "sharpness": {
+    "method": "Wasserstein distance (normed)",
+    "value": 1.2556,
+    "drift": true
+   },
+   "entropy": {
+    "method": "Wasserstein distance (normed)",
+    "value": 1.4501,
+    "drift": true
+   },
+   "confidence": {
+    "method": "Wasserstein distance (normed)",
+    "value": 2.3021,
+    "drift": true
+   }
+  },
+  "drifted_columns": [
+   "contrast",
+   "sharpness",
+   "entropy",
+   "confidence"
+  ]
+ }
+}

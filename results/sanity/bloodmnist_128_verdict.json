@@ -1,0 +1,38 @@
+{
+ "gradient": {
+  "similarity_after_top_randomized": 0.2166886794481509,
+  "passes_sanity": true,
+  "top5pct_overlap": 0.08695898608997729,
+  "spearman_abs": 0.24414731613957497
+ },
+ "smoothgrad": {
+  "similarity_after_top_randomized": 0.12750198943223226,
+  "passes_sanity": true,
+  "top5pct_overlap": 0.47137163998017634,
+  "spearman_abs": 0.7274865393360682
+ },
+ "integrated_gradients": {
+  "similarity_after_top_randomized": 0.24093736955416759,
+  "passes_sanity": true,
+  "top5pct_overlap": 0.11134004164403632,
+  "spearman_abs": 0.34684988721801163
+ },
+ "guided_backprop": {
+  "similarity_after_top_randomized": 0.9253578272734476,
+  "passes_sanity": false,
+  "top5pct_overlap": 0.4703465497525893,
+  "spearman_abs": 0.6439388781986316
+ },
+ "gradcam": {
+  "similarity_after_top_randomized": -0.19023988831333716,
+  "passes_sanity": true,
+  "top5pct_overlap": 0.8718873972117854,
+  "spearman_abs": 0.9932130516378207
+ },
+ "guided_gradcam": {
+  "similarity_after_top_randomized": 0.12227718530849753,
+  "passes_sanity": true,
+  "top5pct_overlap": 0.4991463829883689,
+  "spearman_abs": 0.720066421932047
+ }
+}
