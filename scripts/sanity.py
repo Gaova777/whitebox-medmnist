@@ -34,11 +34,17 @@ def maps_for(model, x, target, device, chunk=5):
 
 
 def compare(reference, other):
-    """Mean of each similarity measure over images, per method."""
+    """Mean of each similarity measure over images, per method.
+
+    Grad-CAM keeps only positive evidence, so some maps come out all zeros; a rank correlation with a constant map is
+    undefined. Those images are left out of the means and counted in `constant_share`.
+    """
     out = {}
     for m in METHODS:
         per_image = [all_measures(a, b) for a, b in zip(reference[m], other[m])]
-        out[m] = {k: float(np.mean([p[k] for p in per_image])) for k in per_image[0]}
+        constant = np.mean([np.ptp(a) == 0 or np.ptp(b) == 0 for a, b in zip(reference[m], other[m])])
+        out[m] = {k: float(np.nanmean([p[k] for p in per_image])) for k in per_image[0]}
+        out[m]["constant_share"] = float(constant)
     return out
 
 
@@ -75,7 +81,7 @@ def main(args):
             for a, b in itertools.combinations([n[m][i] for n in noisy], 2):
                 overlaps.append(top_k_overlap(a.ravel().tolist(), b.ravel().tolist(), k))
                 ranks.append(spearman_abs(a, b))
-        stability[m] = {"top5pct_overlap": float(np.mean(overlaps)), "spearman_abs": float(np.mean(ranks))}
+        stability[m] = {"top5pct_overlap": float(np.mean(overlaps)), "spearman_abs": float(np.nanmean(ranks))}
 
     top = {r["method"]: r["spearman_abs"] for r in rows if r["test"] == "cascading" and r["randomized"] == "fc+layer4"}
     verdict = {m: {"similarity_after_top_randomized": top[m], "passes_sanity": passes_sanity(top[m]),
