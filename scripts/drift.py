@@ -32,7 +32,7 @@ def frame(model, x, device):
 
 
 def main(args):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     info = INFO[args.dataset]
     model = build(len(info["label"]), info["n_channels"], args.size).to(device).eval()
     model.load_state_dict(torch.load(f"data/models/{args.dataset}_{args.size}.pt", map_location=device))
@@ -47,10 +47,17 @@ def main(args):
         current, pred = frame(model, corrupt(xt, kind, rng), device)
         snapshot = Report([DataDriftPreset()]).run(current_data=current, reference_data=reference)
         snapshot.save_html(str(out / f"{args.dataset}_{args.size}_{kind}.html"))
-        drifted = [m for m in snapshot.dict()["metrics"] if "ValueDrift" in m.get("metric_id", "")]
-        columns = {m["metric_id"].split("column=")[1].split(",")[0].rstrip(")"): float(m["value"]) for m in drifted}
-        summary[kind] = {"accuracy": float((pred == yt).mean()), "drift_scores": columns,
-                         "drifted_columns": [c for c, v in columns.items() if v < 0.05]}
+        columns = {}
+        for m in snapshot.dict()["metrics"]:
+            cfg = m["config"]
+            if not cfg["type"].endswith("ValueDrift"):
+                continue
+            # Evidently picks the test by sample size: a p-value (drift if below) or a distance (drift if above)
+            value, threshold = float(m["value"]), cfg["threshold"]
+            drift = value < threshold if "p_value" in cfg["method"] else value >= threshold
+            columns[cfg["column"]] = {"method": cfg["method"], "value": round(value, 4), "drift": drift}
+        summary[kind] = {"accuracy": float((pred == yt).mean()), "drift": columns,
+                         "drifted_columns": [c for c, v in columns.items() if v["drift"]]}
         print(f"  {kind:13} accuracy {summary[kind]['accuracy']:.3f}  drifted: {summary[kind]['drifted_columns']}")
     (out / f"{args.dataset}_{args.size}_summary.json").write_text(json.dumps(summary, indent=1) + "\n")
 
@@ -60,4 +67,5 @@ if __name__ == "__main__":
     parser.add_argument("dataset")
     parser.add_argument("--size", type=int, default=128)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--device", default=None, help="cpu to leave the GPU to another job")
     main(parser.parse_args())
