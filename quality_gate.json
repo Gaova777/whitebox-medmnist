@@ -1,0 +1,4 @@
+{
+  "pneumoniamnist": {"auc": {"min": 0.93}, "must_pass_sanity": ["gradient", "gradcam"]},
+  "bloodmnist": {"auc": {"min": 0.99}, "must_pass_sanity": ["gradient", "gradcam"]}
+}
