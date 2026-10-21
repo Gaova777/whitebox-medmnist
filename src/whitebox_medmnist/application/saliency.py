@@ -24,7 +24,7 @@ def explain(model, x: torch.Tensor, target: torch.Tensor, method: str, seed: int
     elif method == "smoothgrad":
         torch.manual_seed(seed)  # SmoothGrad averages over random noise: the seed is part of the explanation
         a = NoiseTunnel(Saliency(model)).attribute(x, target=target, nt_type="smoothgrad", nt_samples=16,
-                                                   stdevs=0.15 * float(x.max() - x.min()), abs=False)
+                                                   stdevs=0.15 * float(x.detach().max() - x.detach().min()), abs=False)
     elif method == "integrated_gradients":
         a = IntegratedGradients(model).attribute(x, target=target, baselines=torch.zeros_like(x), n_steps=32)
     elif method == "guided_backprop":
